@@ -5,3 +5,4 @@ requests
 pandas
 seaborn
 gunicorn
+tensorflow-cpu==2.1.0
