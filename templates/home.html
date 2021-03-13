@@ -1,0 +1,34 @@
+{% extends "bootstrap/base.html" %}
+{% block title %} Steering behaviour {% endblock title %}
+
+{% block head %}
+{{ super() }}
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.dom.js"></script>
+<script src={{ url_for("send_static", path='/js/sketch.js') }}></script>
+<script src={{ url_for("send_static", path='/js/circle.js') }}></script>
+{% endblock head %}
+
+
+{% block content %}
+<div class="container">
+  <!-- Wrapper text and other elements, for example -->
+
+  <div id='controlPanel'>
+    <h4>Control panel</h4>
+    <button type="button" class="btn btn-primary" id='playButton'>Play</button>
+  </div>
+
+  <!-- div element that will hold the canvas -->
+  <div id="canvasHolder" align="center">
+  </div>
+
+    <div id='infoPanel'>
+      <p id="infoText"></p>
+  </div>
+
+<!--  <button type="button" class="btn btn-primary" id='play_button'></button>-->
+
+</div>
+{% endblock content %}
