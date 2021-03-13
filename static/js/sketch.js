@@ -58,8 +58,6 @@ class p_canvas {
             }
         })
     }
-
-
 }
 
 function create_button(parent, text = "test", classname = "btn btn-primary") {
