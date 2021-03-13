@@ -1,19 +1,19 @@
 var w = 600;
 var h = 400;
 var n;
-let t = 0.0
-
+let time = 0.0
 
 var playPressed = false
 
 class p_canvas {
     constructor() {
-        this.p = new p5(this.canvas)
-        this.time = 0.0
+        time = 0.0
         this.add_event_listeners()
+        this.p = new p5(this.canvas)
     }
 
     canvas(p = new p5()) {
+        var self = this
         p.setup = function () {
             // ...
             p.createCanvas(w, h).parent('canvasHolder');
@@ -28,9 +28,9 @@ class p_canvas {
 
         p.draw = function () {
             p.background(220);
-            p.ellipse(0, 0, 100 + t, 100 + t)
+            p.ellipse(0, 0, 100 + time, 100 + time)
             if (playPressed === true) {
-                t++
+                time++
             }
         }
     }
@@ -54,7 +54,7 @@ class p_canvas {
             }
 
             if (e.target.id === "resetButton") {
-                t = 0.0
+                time = 0.0
             }
         })
     }
