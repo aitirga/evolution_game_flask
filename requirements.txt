@@ -1,0 +1,6 @@
+flask
+pytest
+requests
+pandas
+seaborn
+
