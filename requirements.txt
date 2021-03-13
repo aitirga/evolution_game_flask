@@ -5,4 +5,3 @@ requests
 pandas
 seaborn
 gunicorn
-tensorflow
