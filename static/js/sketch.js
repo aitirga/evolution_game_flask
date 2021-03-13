@@ -28,7 +28,8 @@ class p_canvas {
 
         p.draw = function () {
             p.background(220);
-            p.ellipse(0, 0, 100 + time, 100 + time)
+            console.log(p.c)
+            p.ellipse(p.width / 2.0, p.height / 2.0, 100 + time, 100 + time)
             if (playPressed === true) {
                 time++
             }
