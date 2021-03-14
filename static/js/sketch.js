@@ -3,12 +3,29 @@ let h = 400;
 let time = 0.0
 let nXCells = 50
 let nYCells = 50
-let nSheep = 10
-let nFood = 10
+let nSheep = 20
+let nFood = 15
 
 var playPressed = false
 var eventListenersLoaded = false
 var processing5 = new p5()
+
+let colors = {
+    "base" : "#982833",
+    "lettuce" : "#1fdb64",
+    "sheep" : "#1599e0"
+}
+let directionOptions = {
+    "left": "left",
+    "right": "right",
+    "up": "up",
+    "down": "down"
+}
+
+let initialValues = {
+    "lettuce": 5,
+    "sheep": 10
+}
 
 
 class BaseCanvas {
@@ -52,48 +69,48 @@ class BaseCanvas {
     }
 }
 
+
 class Grid2D extends BaseCanvas {
     constructor(p = new p5()) {
         super();
         this._p = null
-        this.cellArray = BaseCanvas.createEmptyArray(nYCells, nYCells)
+        // this.cellArray = BaseCanvas.createEmptyArray(nYCells, nYCells)
         this.p = p
+        this.cellArray = BaseCanvas.createEmptyArray(nYCells, nYCells)
     }
-
     get setup() {
         let self = this
         return function () {
-            self.p.createCanvas(w, h).parent('canvasHolder');
+            self.p.createCanvas(w, h).parent('canvasHolder')
             self.p.background(220);
             let wCell = w / nXCells
             let hCell = h / nYCells
             let cell = new Cell(100, 100, wCell, hCell, self.p)
-            // let cellArray = new nj.zeros([nXCells, nYCells], )
             for (var i = 0; i < self.cellArray.length; i++) {
                 for (var j = 0; j < self.cellArray[i].length; j++) {
-                    self.cellArray[i][j] = new Cell(i * wCell, j * hCell, wCell, hCell, self.p)
-                    self.cellArray[i][j].color = self.p.color("#982833")
+                    self.cellArray[i][j] = new Cell(i * wCell, j * hCell, wCell, hCell, "base",self.p)
+                    self.cellArray[i][j].color = self.p.color(colors.base)
                 }
             }
             self.cellArray.forEach(element => element.forEach(element => element.display()))
+            // self.testElement = new LettuceElement(5, 5, self.cellArray)
+            // self.testElement.display(self.cellArray)
+            self.generateSheep(self.cellArray)
+            self.generateLettuce(self.cellArray)
+            self.sheep.forEach(element => element.display(self.cellArray))
+            self.lettuce.forEach(element => element.display(self.cellArray))
         }
     }
 
     get draw() {
         var self = this
-        let testSheep = new BaseElement(5, 5)
         return function () {
-            time++
-            testSheep.display(self.cellArray)
-            testSheep.move_x_right(self.cellArray)
-            // if (time < 40) {
-            //     console.log(time)
-            //     self.cellArray[time][0].color = self.p.color("#1fdb64")
-            //     self.cellArray[time][0].display()
-            // }
+            if (playPressed) {
+                time++
+                self.sheep.forEach(element => element.moveRandom(self.cellArray))
+            }
+            // self.testElement.moveRandom(self.cellArray)
 
-            // self.cellArray.forEach(element => element.forEach(element => element.display()))
-            // console.log(time)
         }
     }
 
@@ -107,14 +124,33 @@ class Grid2D extends BaseCanvas {
         this._p.setup = this.setup;
     }
 
+    generateSheep(cellArray) {
+        this.sheep = []
+        for (var i = 0; i < initialValues.sheep; i++)
+        {
+            const idX = Math.floor(Math.random() * (nXCells))
+            const idY = Math.floor(Math.random() * (nYCells))
+            this.sheep.push(new SheepElement(idX, idY, cellArray))
+        }
+    }
+
+    generateLettuce(cellArray) {
+        this.lettuce = []
+        for (var i = 0; i < initialValues.lettuce; i++)
+        {
+            const idX = Math.floor(Math.random() * (nXCells))
+            const idY = Math.floor(Math.random() * (nYCells))
+            this.lettuce.push(new LettuceElement(idX, idY, cellArray))
+        }
+    }
 }
 
 class BaseElement {
-    constructor(idX, idY) {
+    constructor(idX, idY, cellArray) {
         this.idX = idX
         this.idY = idY
+        cellArray[idX][idY].type = "base"
     }
-
 
     /**
      * Shows the current element in the cellArray
@@ -123,31 +159,98 @@ class BaseElement {
      * myFunction('foo', 'Bar', 2)
      */
     display(cellArray) {
-        cellArray[this.idX][this.idY].color = processing5.color("#1fdb64")
+        cellArray[this.idX][this.idY].color = processing5.color(colors.base)
         cellArray[this.idX][this.idY].display()
     }
 
-    move_x_right(cellArray) {
+    moveRandom(cellArray) {
+        let chosenKey = randomProperty(directionOptions)
+        switch (chosenKey) {
+            case "left":
+                this.moveLeft(cellArray)
+                break
+            case "right":
+                this.moveRight(cellArray)
+                break
+            case "up":
+                this.moveUp(cellArray)
+                break
+            case "down":
+                this.moveDown(cellArray)
+                break
+        }
+    }
+
+    moveRight(cellArray) {
         if (this.idX === nXCells - 1) {
-            return false
+            this.moveLeft(cellArray)
         }
         this.displayOff(cellArray)
         this.idX += 1
-        console.log(this.idX, this.idY)
         this.display(cellArray)
+    }
 
+    moveLeft(cellArray) {
+        if (this.idX === 0) {
+            this.moveRight(cellArray)
+        }
+        this.displayOff(cellArray)
+        this.idX -= 1
+        this.display(cellArray)
+    }
 
+    moveUp(cellArray) {
+        if (this.idY === 0) {
+            this.moveDown(cellArray)
+        }
+        this.displayOff(cellArray)
+        this.idY -= 1
+        this.display(cellArray)
+    }
+
+    moveDown(cellArray) {
+        if (this.idY === nYCells - 1) {
+            this.moveUp(cellArray)
+        }
+        this.displayOff(cellArray)
+        this.idY += 1
+        this.display(cellArray)
     }
 
     displayOff(cellArray) {
-        cellArray[this.idX][this.idY].color = processing5.color("#982833")
+        cellArray[this.idX][this.idY].color = processing5.color(colors.base)
         cellArray[this.idX][this.idY].display()
     }
 
 }
 
+class LettuceElement extends BaseElement {
+    constructor(idX, idY, cellArray) {
+        super(idX, idY, cellArray);
+        cellArray[idX][idY].type = "lettuce"
+    }
+
+    display(cellArray) {
+        cellArray[this.idX][this.idY].color = processing5.color(colors.lettuce)
+        cellArray[this.idX][this.idY].display()
+    }
+}
+
+class SheepElement extends BaseElement {
+    constructor(idX, idY, cellArray) {
+        super(idX, idY, cellArray);
+        cellArray[idX][idY].type = "sheep"
+    }
+
+    display(cellArray) {
+        cellArray[this.idX][this.idY].color = processing5.color(colors.sheep)
+        cellArray[this.idX][this.idY].display()
+    }
+}
+
+
 class Cell {
-    constructor(xValue, yValue, wValue, hValue, p = new p5()) {
+    constructor(xValue, yValue, wValue, hValue, type = "base", p = new p5()) {
         this.xValue = xValue
         this.yValue = yValue
         this.wValue = wValue
@@ -155,6 +258,7 @@ class Cell {
         this.p = p
         this.color = 0
         this.edgeColor = 255
+        this.type = type
     }
 
     display() {
@@ -203,9 +307,17 @@ function create_button(parent, text = "test", classname = "btn btn-primary") {
     return button
 }
 
+var randomProperty = function (obj) {
+    var keys = Object.keys(obj);
+    return obj[keys[ keys.length * Math.random() << 0]];
+};
+
+
 function builder(p) {
     sketch = new Grid2D(p);
 }
+
+// Initialize matrix
 
 var sketch = new p5(builder);
 
