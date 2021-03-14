@@ -7,6 +7,7 @@ let nSheep = 50
 let nFood = 15
 
 var playPressed = false
+let resetPressed = false
 var eventListenersLoaded = false
 var processing5 = new p5()
 
@@ -39,7 +40,6 @@ class BaseCanvas {
     addEventListeners() {
         document.addEventListener("click", function (e) {
             if (e.target.id === "playButton") {
-                console.log("click")
                 if (playPressed === false) {
                     const button = document.querySelector("#playButton")
                     button.textContent = "Stop"
@@ -56,7 +56,7 @@ class BaseCanvas {
 
             if (e.target.id === "resetButton") {
                 time = 0.0
-
+                resetPressed = true
             }
         })
     }
@@ -105,7 +105,6 @@ class Grid2D extends BaseCanvas {
             self.sheep.forEach(element => element.display())
             self.lettuce.forEach(element => element.display())
             let testCell = new LettuceElement(10, 10, self.cellArray)
-            console.log(self.cellArray[10][10].type)
         }
     }
 
@@ -114,9 +113,12 @@ class Grid2D extends BaseCanvas {
         return function () {
             if (playPressed) {
                 time++
-                console.log(self.p.frameRate)
                 self.p.frameRate(60)
                 self.sheep.forEach(element => element.moveRandom())
+            }
+            if (resetPressed) {
+                resetPressed = false
+                self.setup()
             }
             // self.testElement.moveRandom(self.cellArray)
 
@@ -134,7 +136,6 @@ class Grid2D extends BaseCanvas {
     }
 
     generateSheep() {
-        console.log(this.cellArray)
         this.sheep = []
         for (var i = 0; i < initialValues.sheep; i++)
         {

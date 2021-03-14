@@ -1,35 +1,47 @@
-{% extends "bootstrap/base.html" %}
-{% block title %} Steering behaviour {% endblock title %}
+{% extends "base.html" %}
 
-{% block head %}
-{{ super() }}
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.dom.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/nicolaspanel/numjs@0.15.1/dist/numjs.min.js"></script>
-<script src={{ url_for('static', filename='js/sketch.js') }}></script>
-{% endblock head %}
-
+{% block title %} 2D grid simulation {% endblock title %}
 
 {% block content %}
 <div class="container">
   <!-- Wrapper text and other elements, for example -->
+  <h4>Control panel</h4>
 
   <div id='controlPanel'>
-    <h4>Control panel</h4>
     <button type="button" class="btn btn-primary" id='playButton'>Play</button>
     <button type="button" class="btn btn-primary" id='resetButton'>Reset</button>
   </div>
-
+  <hr>
+  <h4>Simulation parameters</h4>
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+    <label for="numberOfSheep">Number of sheep</label>
+    <input type="number" class="form-control" id="numberOfSheep" aria-describedby="numberOfSheepHelp" placeholder=30>
+    <small id="numberOfSheepHelp" class="form-text text-muted">Number of sheep in the simulation</small>
+      </div>
+    </div>
+      <div class="col">
+      <div class="form-group">
+    <label for="numberOfLettuce">Number of lettuce</label>
+    <input type="number" class="form-control" id="numberOfLettuce" aria-describedby="numberOfLettuceHelp" placeholder=10>
+    <small id="numberOfLettuceHelp" class="form-text text-muted">Number of sheep in the simulation</small>
+      </div>
+    </div>
+  </div>
   <!-- div element that will hold the canvas -->
-  <div id="canvasHolder" align="center">
+
+<!--  <button type="button" class="btn btn-primary" id='play_button'></button>-->
+</div>
+
+<div class="container">
+    <div id="canvasHolder" align="center">
   </div>
 
     <div id='infoPanel'>
       <p id="infoText"></p>
   </div>
-
-<!--  <button type="button" class="btn btn-primary" id='play_button'></button>-->
-
 </div>
+
+
 {% endblock content %}
