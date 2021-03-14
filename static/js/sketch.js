@@ -3,7 +3,7 @@ let h = 400;
 let time = 0.0
 let nXCells = 50
 let nYCells = 50
-let nSheep = 20
+let nSheep = 50
 let nFood = 15
 
 var playPressed = false
@@ -23,8 +23,8 @@ let directionOptions = {
 }
 
 let initialValues = {
-    "lettuce": 5,
-    "sheep": 10
+    "lettuce": 10,
+    "sheep": 30
 }
 
 
