@@ -56,6 +56,22 @@ class BaseCanvas {
 
             if (e.target.id === "resetButton") {
                 time = 0.0
+                console.log(document.getElementById("numberOfSheep").value)
+                // Read number of sheep
+                const numberOfSheepInput = document.getElementById("numberOfSheep")
+                if (numberOfSheepInput.value.length == 0) {
+                    initialValues.sheep = parseInt(numberOfSheepInput.getAttribute("placeholder"))
+                } else {
+                    initialValues.sheep = parseInt(numberOfSheepInput.value)
+                }
+
+                // Read number of lettuce
+                const numberOfLettuceInput = document.getElementById("numberOfLettuce")
+                if (numberOfLettuceInput.value.length == 0) {
+                    initialValues.lettuce = parseInt(numberOfLettuceInput.getAttribute("placeholder"))
+                } else {
+                    initialValues.lettuce = parseInt(numberOfLettuceInput.value)
+                }
                 resetPressed = true
             }
         })
